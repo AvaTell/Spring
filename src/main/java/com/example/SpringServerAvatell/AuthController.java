@@ -12,16 +12,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@SessionAttributes("username")
 @ResponseBody()
 public class AuthController {
     @GetMapping("/auth")
+    @SessionAttributes("user")
     public String authPage(HttpServletRequest request, Model model, @RequestParam String user, @RequestParam String pass){
         AvaTaxClient client = new AvaTaxClient("Test","1.0","localhost",AvaTaxEnvironment.Production).withSecurity(user,pass);
         try{
             PingResultModel ping = client.ping();
             if(ping.getAuthenticated()){
                 System.out.println("Authentication recieved!");
+                model.addAttribute("username",user);
+                model.addAttribute("password",pass);
             }else{
                 System.out.println("Authentication rejected");
             }
