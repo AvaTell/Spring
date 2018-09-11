@@ -38,7 +38,6 @@ import java.util.stream.Stream;
 
 @Controller
 @SessionAttributes({"username","password"})
-@ResponseBody()
 public class QueryController {
 
     @GetMapping("/query/byzipcode")
@@ -124,7 +123,11 @@ public class QueryController {
 
             System.out.println(rate);
 
-            return result;
+            model.addAttribute("rateInfo",rate);
+
+            model.addAttribute("totalTax",rate.totalRate);
+
+            return "result";
         } catch (ClientProtocolException e) {
 
             e.printStackTrace();
@@ -135,7 +138,7 @@ public class QueryController {
         }
 
 
-        return result;
+        return "result";
     }
 
 

@@ -13,8 +13,8 @@ public class FinderController {
     public String finderPage(HttpServletRequest request, Model model) {
         HttpSession sesh = request.getSession();
         if(sesh.getAttribute("username")==null||sesh.getAttribute("password")==null){
-            return ("finder");
+            return ("redirect:/index");
         }
-        return ("redirect:/index");
+        return ("finder");
     }
 }
