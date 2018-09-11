@@ -1,5 +1,14 @@
-<form action="/query">
+<p>Retrieve the Tax Rate for a Specified Zip Code</p>
+<form action="/query/byzipcode" method="GET">
     <label>Country</label></lable><input type="text" name="country">
     <label>Zip Code</label><input type="number" name="zipCode">
+    <input type="submit">
+</form>
+
+<p>Retrieve the Tax Rate for a Product Code</p>
+<form action="/query/bytaxcode" method="POST">
+    <label>Tax Code</label></lable><input type="text" name="taxcode">
+    <label>Description</label><input type="text" name="description">
+    <label>Zip Code</label><input type="number" name="taxzipcode">
     <input type="submit">
 </form>
