@@ -33,11 +33,13 @@ import java.util.Base64;
 @SessionAttributes({"username","password"})
 @ResponseBody()
 public class QueryController {
+
     @GetMapping("/query/byzipcode")
     public String queryByZipCode(HttpServletRequest request, Model model, @RequestParam String country, @RequestParam String zipCode){
         String result = null;
 
-        if(model.asMap().get("username")==null||model.asMap().get("password")==null){
+        if(model.asMap().get("username")==null||model.asMap().get("password")==null||model.asMap().get("isLoggedIn")==null){
+
             return"redirect:/index";
         }
         String user=model.asMap().get("username").toString();

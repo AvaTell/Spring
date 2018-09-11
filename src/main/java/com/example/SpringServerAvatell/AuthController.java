@@ -14,6 +14,14 @@ import javax.servlet.http.HttpSession;
 @Controller
 @SessionAttributes({"username","password"})
 public class AuthController {
+    @RequestMapping("/logout")
+    public String logout(HttpServletRequest request, Model model){
+        HttpSession sesh = request.getSession();
+        sesh.setAttribute("username", null);
+        sesh.setAttribute("password", null);
+        sesh.setAttribute("isLoggedIn",null);
+        return "redirect:/index";
+    }
     @GetMapping("/auth")
     public String authPage(HttpServletRequest request, Model model, @RequestParam String user, @RequestParam String pass){
         HttpSession sesh = request.getSession();
@@ -22,11 +30,9 @@ public class AuthController {
             PingResultModel ping = client.ping();
             if(ping.getAuthenticated()){
                 System.out.println("Authentication recieved!");
-                model.addAttribute("username",user);
-                model.addAttribute("password",pass);
-                model.addAttribute("isLoggedIn",true);
                 sesh.setAttribute("username",user);
                 sesh.setAttribute("password",pass);
+                sesh.setAttribute("isLoggedIn", true);
                 return "redirect:/finder";
             }else{
                 System.out.println("Authentication rejected");
