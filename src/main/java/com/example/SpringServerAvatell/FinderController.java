@@ -12,7 +12,7 @@ public class FinderController {
     @RequestMapping("/finder")
     public String finderPage(HttpServletRequest request, Model model) {
         HttpSession sesh = request.getSession();
-        if(sesh.getAttribute("password")!=null&&sesh.getAttribute("username")!=null&&sesh.getAttribute("isLoggedIn")!=null){
+        if((model.asMap().get("username")==null||model.asMap().get("password")==null||model.asMap().get("isLoggedIn")==null)&&(sesh.getAttribute("username")==null||sesh.getAttribute("password")==null)){
             return ("finder");
         }
         return ("redirect:/index");
