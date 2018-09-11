@@ -1,5 +1,6 @@
 package com.example.SpringServerAvatell;
 
+import POJO.Transaction;
 import POJO.ZipCodeQuery;
 import POJO.TaxRateByPostalCode;
 import POJO.TaxRate;
@@ -8,30 +9,27 @@ import jdk.nashorn.internal.parser.JSONParser;
 import jdk.nashorn.internal.runtime.regexp.joni.constants.StringType;
 import net.avalara.avatax.rest.client.AvaTaxClient;
 import net.avalara.avatax.rest.client.enums.AvaTaxEnvironment;
-import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
+import com.google.gson.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.Arrays;
@@ -49,10 +47,9 @@ public class QueryController {
         ZipCodeQuery zipCodeQuery = new ZipCodeQuery(country, zipCode);
         String result = null;
 
-
         HttpSession sesh = request.getSession();
 
-        if(sesh.getAttribute("username")==null||sesh.getAttribute("password")==null||sesh.getAttribute("isLoggedIn")==null){
+        if(sesh.getAttribute("username")==null||sesh.getAttribute("password")==null){
 
             return"redirect:/index";
         }
@@ -146,13 +143,19 @@ public class QueryController {
     public String queryByTaxCode(HttpServletRequest request, Model model, @RequestParam String taxcode, @RequestParam String description, @RequestParam String taxzipcode){
         String result = null;
 
-        if(model.asMap().get("username")==null||model.asMap().get("password")==null){
+        HttpSession sesh = request.getSession();
+
+        if(sesh.getAttribute("username")==null||sesh.getAttribute("password")==null){
             return"redirect:/index";
         }
         String user=model.asMap().get("username").toString();
         String pass=model.asMap().get("password").toString();
 
         RestTemplate rTemp = new RestTemplate();
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyy/MM/dd");
+
+        //Transaction sendVal = new Transaction(type,companyCode,dtf.format(LocalDateTime.now()), "ABC",,false,"USD",1,1,1,taxcode,,description);
 
         try {
 

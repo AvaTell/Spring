@@ -17,9 +17,11 @@ public class AuthController {
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request, Model model){
         HttpSession sesh = request.getSession();
-        sesh.setAttribute("username", null);
-        sesh.setAttribute("password", null);
-        sesh.setAttribute("isLoggedIn",null);
+        sesh.removeAttribute("username");
+        sesh.removeAttribute("password");
+        sesh.removeAttribute("isLoggedIn");
+        sesh.invalidate();
+
         return "redirect:/index";
     }
     @GetMapping("/auth")
