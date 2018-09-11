@@ -23,7 +23,7 @@ import java.util.Base64;
 public class QueryController {
     @GetMapping("/query")
     public String queryPage(HttpServletRequest request, Model model, @RequestParam String country, @RequestParam String zipCode){
-        if(model.asMap().get("username")==null||model.asMap().get("password")==null){
+        if(model.asMap().get("username")==null||model.asMap().get("password")==null||model.asMap().get("isLoggedIn")==null){
             return"redirect:/index";
         }
         String user=model.asMap().get("username").toString();
