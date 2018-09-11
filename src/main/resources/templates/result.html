@@ -7,7 +7,11 @@
     <title>results</title>
 </head>
 <body>
-<header>Your results are:</header>
-    <p th:text="${totalTax}"></p>
+<header>Your combined tax rate is:</header>
+    <p th:text="${'Your total tax rate is '+rateInfo.totalRate}"></p>
+<p th:text="${'WA STATE TAX ' +rateInfo.rates[0].rate}"></p>
+<p th:text="${'SPECIAL TAX '+rateInfo.rates[1].rate}"></p>
+<p th:text="${'LOCAL TAX '+rateInfo.rates[2].rate}"></p>
+
 </body>
 </html>

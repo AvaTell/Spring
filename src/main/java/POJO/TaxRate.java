@@ -1,7 +1,7 @@
 package POJO;
 
 public class TaxRate {
-    double rate;
-    String name;
-    String type;
+    public double rate;
+    public String name;
+    public String type;
 }
