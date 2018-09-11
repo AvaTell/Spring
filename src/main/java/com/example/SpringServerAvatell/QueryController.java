@@ -1,6 +1,12 @@
 package com.example.SpringServerAvatell;
 
 import POJO.Transaction;
+import POJO.ZipCodeQuery;
+import POJO.TaxRateByPostalCode;
+import POJO.TaxRate;
+import com.google.gson.Gson;
+import jdk.nashorn.internal.parser.JSONParser;
+import jdk.nashorn.internal.runtime.regexp.joni.constants.StringType;
 import net.avalara.avatax.rest.client.AvaTaxClient;
 import net.avalara.avatax.rest.client.enums.AvaTaxEnvironment;
 import org.apache.http.HttpResponse;
@@ -24,7 +30,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.lang.reflect.Type;
+import java.net.URL;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.stream.Stream;
 
 @Controller
 @SessionAttributes({"username","password"})
@@ -33,6 +43,8 @@ public class QueryController {
 
     @GetMapping("/query/byzipcode")
     public String queryByZipCode(HttpServletRequest request, Model model, @RequestParam String country, @RequestParam String zipCode){
+
+        ZipCodeQuery zipCodeQuery = new ZipCodeQuery(country, zipCode);
         String result = null;
 
         HttpSession sesh = request.getSession();
@@ -44,42 +56,19 @@ public class QueryController {
         String user=model.asMap().get("username").toString();
         String pass=model.asMap().get("password").toString();
 
-        RestTemplate rTemp = new RestTemplate();
-        //GET "https://rest.avatax.com/api/v2/taxrates/bypostalcode?country=USA&postalCode=98387"
-        // -H "accept: application/json" -H
-        // "Authorization: Basic Y29oZW5hbXl2QGdtYWlsLmNvbTpCaWdyZWRmaXNoNzIh" -H
-        try{
-            AvaTaxClient client = new AvaTaxClient("Test","1.0","localhost",AvaTaxEnvironment.Production).withSecurity(user,pass);
-//            URL requestURL = new URL("https://rest.avataxcom/api/v2/taxrates/bypostalcode?country="+country+"&postalCode="+zipCode);
-//
-//            String authorized = Base64.getEncoder().encodeToString((user+":"+pass).getBytes());
-//
-//            HttpClient client2 = HttpClients.custom().build();
-//            HttpUriRequest request2 = RequestBuilder.get()
-//                    .setUri("https://rest.avatax.com/api/v2/taxratesbyzipcode/download/2018-09-09")
-//                    .setHeader(HttpHeaders.ACCEPT, "application/json")
-//                    .setHeader(HttpHeaders.AUTHORIZATION, ("Basic " + Base64.getEncoder().encodeToString((user + ":" + pass).getBytes())))
-//                    .build();
-//            HttpResponse yadayada = client2.execute(request2);
-//            System.out.println(client2);
-//            System.out.println(request2);
-//            System.out.println(yadayada);
-//
-        }catch(Exception e){
-            System.out.println("Bad");
-        }
+//        RestTemplate rTemp = new RestTemplate();
 
         try {
 
             String authorized = Base64.getEncoder().encodeToString((user+":"+pass).getBytes());
             String requestURL = "https://rest.avatax.com/api/v2/taxrates/bypostalcode?country="+country+"&postalCode="+zipCode;
 
-/*
-RESOURCES: https://hc.apache.org/httpcomponents-client-ga/quickstart.html
- */
+            /*
+            RESOURCES: https://hc.apache.org/httpcomponents-client-ga/quickstart.html
+            NOTE: Where I got the info for using the HttpClient
+             */
+
             CloseableHttpClient httpclient = HttpClients.createDefault();
-//            HttpGet getRequest = new HttpGet(
-//                    "https://rest.avatax.com/api/v2/taxratesbyzipcode/download/2018-09-10");
             HttpGet getRequest = new HttpGet(requestURL);
             getRequest.addHeader("accept", "application/json");
             getRequest.addHeader("authorization", "Basic " + authorized);
@@ -94,13 +83,46 @@ RESOURCES: https://hc.apache.org/httpcomponents-client-ga/quickstart.html
             BufferedReader br = new BufferedReader(
                     new InputStreamReader((response.getEntity().getContent())));
 
-            String output;
+            String output = null;
             System.out.println("Output from Server .... \n");
+
+            /*
+            Example Data Coming Back:
+            {
+            "totalRate":0.100000,"rates":
+            [{
+            "rate":0.065000,
+            "name":"WA STATE TAX",
+            "type":"State"
+            },
+            {
+            "rate":0.000000,
+            "name":"WA COUNTY TAX",
+            "type":"County"
+            },
+            {
+            "rate":0.035000,
+            "name":"WA CITY TAX",
+            "type":"City"
+            }]}
+             */
+
+
             while ((output = br.readLine()) != null) {
-                if (output.contains(zipCode))
-                System.out.println(output);
-                result = output;
+                String[] outputArray = output.split("[^a-zA-Z0-9.\\s]");
+                System.out.println("Output Array = " + Arrays.deepToString(outputArray));
+
+
+
+                if (output.contains(zipCodeQuery.zipCode))
+                    System.out.println("Output only = " + output);
+                    result = output;
             }
+            Gson gson = new Gson();
+
+            TaxRateByPostalCode rate = gson.fromJson(result, TaxRateByPostalCode.class);
+
+            System.out.println(rate);
 
             return result;
         } catch (ClientProtocolException e) {
