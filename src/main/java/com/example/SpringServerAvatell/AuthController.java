@@ -12,10 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@ResponseBody()
+@SessionAttributes({"username","password"})
 public class AuthController {
     @GetMapping("/auth")
     public String authPage(HttpServletRequest request, Model model, @RequestParam String user, @RequestParam String pass){
+        HttpSession sesh = request.getSession();
         AvaTaxClient client = new AvaTaxClient("Test","1.0","localhost",AvaTaxEnvironment.Production).withSecurity(user,pass);
         try{
             PingResultModel ping = client.ping();
@@ -23,7 +24,10 @@ public class AuthController {
                 System.out.println("Authentication recieved!");
                 model.addAttribute("username",user);
                 model.addAttribute("password",pass);
-
+                model.addAttribute("isLoggedIn",true);
+                sesh.setAttribute("username",user);
+                sesh.setAttribute("password",pass);
+                return "redirect:/finder";
             }else{
                 System.out.println("Authentication rejected");
             }
@@ -31,6 +35,6 @@ public class AuthController {
             System.out.println("inauthenticated");
             System.out.println(e);
         }
-        return "worked";
+        return "redirect:/index";
     }
 }
