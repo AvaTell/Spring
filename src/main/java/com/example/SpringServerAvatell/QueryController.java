@@ -37,7 +37,7 @@ public class QueryController {
 
         HttpSession sesh = request.getSession();
 
-        if((model.asMap().get("username")==null||model.asMap().get("password")==null||model.asMap().get("isLoggedIn")==null)&&(sesh.getAttribute("username")==null||sesh.getAttribute("password")==null)){
+        if(sesh.getAttribute("username")==null||sesh.getAttribute("password")==null){
 
             return"redirect:/index";
         }
@@ -123,7 +123,7 @@ RESOURCES: https://hc.apache.org/httpcomponents-client-ga/quickstart.html
 
         HttpSession sesh = request.getSession();
 
-        if((model.asMap().get("username")==null||model.asMap().get("password")==null)&&(sesh.getAttribute("username")==null||sesh.getAttribute("password")==null)){
+        if(sesh.getAttribute("username")==null||sesh.getAttribute("password")==null){
             return"redirect:/index";
         }
         String user=model.asMap().get("username").toString();
