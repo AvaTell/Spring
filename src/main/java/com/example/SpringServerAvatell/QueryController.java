@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -38,7 +39,9 @@ public class QueryController {
     public String queryByZipCode(HttpServletRequest request, Model model, @RequestParam String country, @RequestParam String zipCode){
         String result = null;
 
-        if(model.asMap().get("username")==null||model.asMap().get("password")==null||model.asMap().get("isLoggedIn")==null){
+        HttpSession sesh = request.getSession();
+
+        if(sesh.getAttribute("username")==null||sesh.getAttribute("password")==null||sesh.getAttribute("isLoggedIn")==null){
 
             return"redirect:/index";
         }
