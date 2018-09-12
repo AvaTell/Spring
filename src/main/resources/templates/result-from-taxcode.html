@@ -7,19 +7,35 @@
     <title>results</title>
 </head>
 <body>
-    <!--<p><span>Your COMBINED total tax rate is </span><span th:text="${summaries.summary}"></span></p>-->
-    <b><p>Your COMBINED tax rate is <span th:text="${totalTax}"></span></p></b>
-    <b><p>Your COMBINED taxable amount is <span th:text="${taxableAmt}"></span></p></b>
-<ul th:each="index : ${summaries}">
-    <i><p th:text="${index.taxName} + ' ' + ${index.rate}"></p></i>
+    <div>
+        <p>Result for transaction with <span th:text="${mainObject.customerCode}"></span></p>
+        <ul>
+            <li><span>Currency: </span><span th:text="${mainObject.currencyCode}"></span></li>
+            <li><span>Total Amount: $</span><span th:text="${mainObject.totalAmount}"></span></li>
+            <li><span>Total Tax: $</span><span th:text="${mainObject.totalTax}"></span></li>
+            <li><span>Total Taxable: $</span><span th:text="${mainObject.totalTaxable}"></span></li>
+            <li><span>Total Exempt: $</span><span th:text="${mainObject.totalExempt}"></span></li>
+            <i><li><span>Total TaxCalculated: $</span><span th:text="${mainObject.totalTaxCalculated}"></span></li></i>
+        </ul>
+    </div>
+    <div>
+        <b><p>Your COMBINED tax rate is <span th:text="${totalTax}"></span></p></b>
+        <!--<b><p>Your COMBINED taxable amount is <span th:text="${taxableAmt}"></span></p></b>-->
 
-    <p>Tax Type: <span th:text="${index.taxType}"></span></p>
-    <p>Rate Type: <span th:text="${index.rateType}"></span></p>
-    <p>Taxable Amt: $<span th:text="${index.taxable}"></span></p>
-    <p>Tax Calculated: $<span th:text="${index.taxCalculated}"></span></p>
-    <p>Non-Taxable: $<span th:text="${index.nonTaxable}"></span></p>
-    <p>Exemption: $<span th:text="${index.exemption}"></span></p>
-</ul>
+    </div>
 
+    <div>
+        <ul th:each="index : ${summaries}">
+            <b><i><p th:text="${index.taxName} + ' ' + ${index.rate}"></p></i></b>
+            <i><p th:text="${index.jurisName}"></p></i>
+
+            <p>Tax Type: <span th:text="${index.taxType}"></span></p>
+            <p>Rate Type: <span th:text="${index.rateType}"></span></p>
+            <p>Taxable Amt: $<span th:text="${index.taxable}"></span></p>
+            <p>Tax Calculated: $<span th:text="${index.taxCalculated}"></span></p>
+            <p>Non-Taxable: $<span th:text="${index.nonTaxable}"></span></p>
+            <p>Exemption: $<span th:text="${index.exemption}"></span></p>
+        </ul>
+    </div>
 </body>
 </html>

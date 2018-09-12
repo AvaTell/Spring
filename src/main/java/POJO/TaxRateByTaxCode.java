@@ -5,12 +5,27 @@ public class TaxRateByTaxCode {
     public TaxCodeSummary[] summary;
     public String name;
     public String type;
+    public String currencyCode;
+    public String customerCode;
+    public double totalAmount;
+    public double totalExempt;
+    public double totalTax;
+    public double totalTaxable;
+    public double totalTaxCalculated;
 
-    public TaxRateByTaxCode(double totalRate, TaxCodeSummary[] summary, String name, String type){
+
+    public TaxRateByTaxCode(double totalRate, TaxCodeSummary[] summary, String name, String type, String currencyCode, String customerCode, double totalAmount, double totalExempt, double totalTax, double totalTaxable, double totalTaxCalculated){
         this.totalRate=totalRate;
         this.summary=summary;
         this.name=name;
         this.type=type;
+        this.currencyCode = currencyCode;
+        this.customerCode = customerCode;
+        this.totalAmount = totalAmount;
+        this.totalExempt = totalExempt;
+        this.totalTax = totalTax;
+        this.totalTaxable = totalTaxable;
+        this.totalTaxCalculated = totalTaxCalculated;
     }
 }
 

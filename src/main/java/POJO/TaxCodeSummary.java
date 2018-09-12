@@ -2,6 +2,7 @@ package POJO;
 
 public class TaxCodeSummary {
     public String taxType;
+    public String jurisName;
     public String taxName;
     public String rateType;
     public double taxable;
