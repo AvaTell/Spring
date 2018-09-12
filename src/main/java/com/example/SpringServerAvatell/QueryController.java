@@ -105,8 +105,8 @@ public class QueryController {
 
 
             while ((output = br.readLine()) != null) {
-                String[] outputArray = output.split("[^a-zA-Z0-9.\\s]");
-                System.out.println("Output Array = " + Arrays.deepToString(outputArray));
+//                String[] outputArray = output.split("[^a-zA-Z0-9.\\s]");
+//                System.out.println("Output Array = " + Arrays.deepToString(outputArray));
 
 
 
