@@ -7,9 +7,15 @@
     <title>results</title>
 </head>
 <body>
-    <p><span>Your COMBINED total tax rate is </span><span th:text="${rateInfo.totalRate}"></span></p>
-<ul th:each="rate : ${rateInfo.rates}">
-    <li th:text="${rate.name} + ' ' + ${rate.rate}"></li>
+    <!--<p><span>Your COMBINED total tax rate is </span><span th:text="${summaries.summary}"></span></p>-->
+    <b><p>Your COMBINED tax rate is <span th:text="${totalTax}"></span></p></b>
+<ul th:each="index : ${summaries}">
+    <i><p th:text="${index.taxName} + ' ' + ${index.rate}"></p></i>
+    <p>Tax Type: <span th:text="${index.taxType}"></span></p>
+    <p>Rate Type: <span th:text="${index.rateType}"></span></p>
+    <p>Tax Calculated: <span th:text="${index.taxCalculated}"></span></p>
+    <p>Non-Taxable: <span th:text="${index.nonTaxable}"></span></p>
+    <p>Exemption: <span th:text="${index.exemption}"></span></p>
 </ul>
 
 </body>

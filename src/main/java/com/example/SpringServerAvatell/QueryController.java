@@ -1,5 +1,7 @@
 package com.example.SpringServerAvatell;
 
+import POJO.TaxCodeSummary;
+import POJO.TaxRateByTaxCode;
 import POJO.ZipCodeQuery;
 import POJO.TaxRateByPostalCode;
 import com.google.gson.Gson;
@@ -138,7 +140,7 @@ public class QueryController {
 
 
     @PostMapping("/query/bytaxcode")
-    @ResponseBody
+//    @ResponseBody
     public String queryByTaxCode(HttpServletRequest request, Model model, @RequestParam String taxcode, @RequestParam String description, @RequestParam String taxzipcode){
         String result = null;
 
@@ -226,14 +228,24 @@ RESOURCES FOR STRING ENTITY: https://stackoverflow.com/questions/12059278/how-to
                     System.out.println(output);
                 result = output;
             }
+            Gson gson1 = new Gson();
 
-            //TaxRateByPostalCode rate = gson.fromJson(result, TaxRateByPostalCode.class);
+            TaxRateByTaxCode summaries = gson1.fromJson(result, TaxRateByTaxCode.class);
 
+            System.out.println(summaries);
 
-//            model.addAttribute("taxRates", )
+            model.addAttribute("summaries",summaries.summary);
 
-//            return "result-from-taxcode";
-            return result;
+            Double totalTax = 0.0;
+
+            for (TaxCodeSummary rate : summaries.summary) {
+                totalTax +=rate.rate;
+
+                System.out.println("Total Tax = : " + totalTax);
+            }
+            model.addAttribute("totalTax", totalTax);
+
+            return "result-from-taxcode";
         } catch (ClientProtocolException e) {
 
             e.printStackTrace();
@@ -244,7 +256,7 @@ RESOURCES FOR STRING ENTITY: https://stackoverflow.com/questions/12059278/how-to
         }
 
 
-//        return "result-from-taxcode";
-        return result;
+        return "result-from-taxcode";
+//        return result;
     }
 }
