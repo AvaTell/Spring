@@ -237,33 +237,26 @@ RESOURCES FOR STRING ENTITY: https://stackoverflow.com/questions/12059278/how-to
 
             System.out.println(summaries);
 
+            model.addAttribute("mainObject", summaries);
             model.addAttribute("summaries",summaries.summary);
 
             Double totalTax = 0.0;
-            Double taxableAmt = 0.0;
+//            Double taxableAmt = 0.0;
 
             for (TaxCodeSummary rate : summaries.summary) {
                 totalTax +=rate.rate;
-                taxableAmt += rate.taxable;
-
+//                taxableAmt += rate.taxable;
             }
-            System.out.println("Total Tax = : " + totalTax);
-            System.out.println("Total Tax = : " + taxableAmt);
+
             model.addAttribute("totalTax", totalTax);
-            model.addAttribute("taxableAmt", taxableAmt
-            );
-
-
-
-
+//            model.addAttribute("taxableAmt", taxableAmt);
 
             return "result-from-taxcode";
-        } catch (ClientProtocolException e) {
 
+        } catch (ClientProtocolException e) {
             e.printStackTrace();
 
         } catch (IOException e) {
-
             e.printStackTrace();
         }
 
