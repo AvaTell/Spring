@@ -161,6 +161,7 @@ Object we get back from PC0401000:
     "taxCalculated":0.0,
     "nonTaxable":0.0,
     "exemption":0.0},
+
      {"country":"US",
     "region":"WA",
     "jurisType":"County",
@@ -177,6 +178,7 @@ Object we get back from PC0401000:
     "taxCalculated":0.0,
     "nonTaxable":0.0,
     "exemption":0.0},
+
      {"country":"US",
     "region":"WA",
     "jurisType":"Special",

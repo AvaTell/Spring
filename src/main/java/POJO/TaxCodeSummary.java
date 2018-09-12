@@ -4,7 +4,7 @@ public class TaxCodeSummary {
     public String taxType;
     public String taxName;
     public String rateType;
-    public String taxable;
+    public double taxable;
     public double rate;
     public double tax;
     public double taxCalculated;
