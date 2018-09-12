@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>results</title>
+</head>
+<body>
+    <p><span>Your COMBINED total tax rate is </span><span th:text="${rateInfo.totalRate}"></span></p>
+<ul th:each="rate : ${rateInfo.rates}">
+    <li th:text="${rate.name} + ' ' + ${rate.rate}"></li>
+</ul>
+
+</body>
+</html>
