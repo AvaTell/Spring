@@ -140,7 +140,7 @@ public class QueryController {
 
 
     @PostMapping("/query/bytaxcode")
-//    @ResponseBody
+    @ResponseBody
     public String queryByTaxCode(HttpServletRequest request, Model model, @RequestParam String taxcode, @RequestParam String description, @RequestParam String taxzipcode){
         String result = null;
 
@@ -245,7 +245,9 @@ RESOURCES FOR STRING ENTITY: https://stackoverflow.com/questions/12059278/how-to
             }
             model.addAttribute("totalTax", totalTax);
 
-            return "result-from-taxcode";
+//            return "result-from-taxcode";
+                    return result;
+
         } catch (ClientProtocolException e) {
 
             e.printStackTrace();
@@ -256,7 +258,7 @@ RESOURCES FOR STRING ENTITY: https://stackoverflow.com/questions/12059278/how-to
         }
 
 
-        return "result-from-taxcode";
-//        return result;
+//        return "result-from-taxcode";
+        return result;
     }
 }
