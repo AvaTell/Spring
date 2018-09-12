@@ -1,5 +1,7 @@
 package com.example.SpringServerAvatell;
 
+import POJO.TaxRateByPostalCode;
+import POJO.ZipCodeQuery;
 import com.google.gson.Gson;
 import net.avalara.avatax.rest.client.enums.DocumentType;
 import net.avalara.avatax.rest.client.models.AddressLocationInfo;
@@ -8,15 +10,15 @@ import net.avalara.avatax.rest.client.models.CreateTransactionModel;
 import net.avalara.avatax.rest.client.models.LineItemModel;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,10 +28,105 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 
+@Controller
+@SessionAttributes({"username","password"})
 public class ApiController {
+    @GetMapping("/query/byzipcode")
+    public String queryByZipCode(HttpServletRequest request, Model model, @RequestParam String country, @RequestParam String zipCode){
+
+        ZipCodeQuery zipCodeQuery = new ZipCodeQuery(country, zipCode);
+        String result = null;
+
+        HttpSession sesh = request.getSession();
+
+        if(sesh.getAttribute("username")==null||sesh.getAttribute("password")==null){
+
+            return"redirect:/index";
+        }
+        String user=model.asMap().get("username").toString();
+        String pass=model.asMap().get("password").toString();
+
+//        RestTemplate rTemp = new RestTemplate();
+
+        try {
+
+            String authorized = Base64.getEncoder().encodeToString((user+":"+pass).getBytes());
+            String requestURL = "https://rest.avatax.com/api/v2/taxrates/bypostalcode?country="+country+"&postalCode="+zipCode;
+
+            /*
+            RESOURCES: https://hc.apache.org/httpcomponents-client-ga/quickstart.html
+            NOTE: Where I got the info for using the HttpClient
+             */
+
+            CloseableHttpClient httpclient = HttpClients.createDefault();
+            HttpGet getRequest = new HttpGet(requestURL);
+            getRequest.addHeader("accept", "application/json");
+            getRequest.addHeader("authorization", "Basic " + authorized);
+
+            HttpResponse response = httpclient.execute(getRequest);
+
+            if (response.getStatusLine().getStatusCode() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + response.getStatusLine().getStatusCode());
+            }
+
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader((response.getEntity().getContent())));
+
+            String output = null;
+            System.out.println("Output from Server .... \n");
+
+            /*
+            Example Data Coming Back:
+            {
+            "totalRate":0.100000,"rates":
+            [{
+            "rate":0.065000,
+            "name":"WA STATE TAX",
+            "type":"State"
+            },
+            {
+            "rate":0.000000,
+            "name":"WA COUNTY TAX",
+            "type":"County"
+            },
+            {
+            "rate":0.035000,
+            "name":"WA CITY TAX",
+            "type":"City"
+            }]}
+             */
+
+
+            while ((output = br.readLine()) != null) {
+                String[] outputArray = output.split("[^a-zA-Z0-9.\\s]");
+                System.out.println("Output Array = " + Arrays.deepToString(outputArray));
+
+
+
+                if (output.contains(zipCodeQuery.zipCode))
+                    System.out.println("Output only = " + output);
+                result = output;
+            }
+            return result;
+
+        } catch (ClientProtocolException e) {
+
+            e.printStackTrace();
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+
+
+        return "result-from-zipcode";
+    }
+
 
     @PostMapping("/api/query/bytaxcode")
     @ResponseBody
@@ -141,4 +238,6 @@ RESOURCES FOR STRING ENTITY: https://stackoverflow.com/questions/12059278/how-to
 //        return "result-from-taxcode";
         return result;
     }
+
+
 }
