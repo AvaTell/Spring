@@ -1,14 +1,8 @@
 package com.example.SpringServerAvatell;
 
-import POJO.Transaction;
 import POJO.ZipCodeQuery;
 import POJO.TaxRateByPostalCode;
-import POJO.TaxRate;
 import com.google.gson.Gson;
-import jdk.nashorn.internal.parser.JSONParser;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.StringType;
-import net.avalara.avatax.rest.client.AvaTaxClient;
-import net.avalara.avatax.rest.client.enums.AvaTaxEnvironment;
 import net.avalara.avatax.rest.client.enums.DocumentType;
 import net.avalara.avatax.rest.client.models.AddressLocationInfo;
 import net.avalara.avatax.rest.client.models.AddressesModel;
@@ -22,28 +16,18 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import com.google.gson.*;
-import sun.jvm.hotspot.debugger.Address;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.sound.sampled.Line;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.lang.reflect.Type;
-import java.net.URL;
 import java.util.*;
-import java.util.stream.Stream;
 
 @Controller
 @SessionAttributes({"username","password"})
@@ -136,7 +120,7 @@ public class QueryController {
 
             model.addAttribute("totalTax",rate.totalRate);
 
-            return "result";
+            return "result-from-zipcode";
         } catch (ClientProtocolException e) {
 
             e.printStackTrace();
@@ -147,7 +131,7 @@ public class QueryController {
         }
 
 
-        return "result";
+        return "result-from-zipcode";
     }
 
 
@@ -167,8 +151,6 @@ public class QueryController {
         RestTemplate rTemp = new RestTemplate();
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-
-        //Transaction sendVal = new Transaction(type,companyCode,dtf.format(LocalDateTime.now()), "ABC",,false,"USD",1,1,1,taxcode,,description);
 
         CreateTransactionModel ctm = new CreateTransactionModel();
 
@@ -233,7 +215,7 @@ RESOURCES FOR STRING ENTITY: https://stackoverflow.com/questions/12059278/how-to
             BufferedReader br = new BufferedReader(
                     new InputStreamReader((response.getEntity().getContent())));
 
-            CreateTransactionModel model3 = new CreateTransactionModel();
+//            CreateTransactionModel model3 = new CreateTransactionModel();
 
             String output;
             System.out.println("Output from Server .... \n");
@@ -243,6 +225,12 @@ RESOURCES FOR STRING ENTITY: https://stackoverflow.com/questions/12059278/how-to
                 result = output;
             }
 
+            //TaxRateByPostalCode rate = gson.fromJson(result, TaxRateByPostalCode.class);
+
+
+//            model.addAttribute("taxRates", )
+
+//            return "result-from-taxcode";
             return result;
         } catch (ClientProtocolException e) {
 
@@ -254,6 +242,7 @@ RESOURCES FOR STRING ENTITY: https://stackoverflow.com/questions/12059278/how-to
         }
 
 
+//        return "result-from-taxcode";
         return result;
     }
 }
