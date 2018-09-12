@@ -35,7 +35,7 @@ import java.util.Date;
 @Controller
 @SessionAttributes({"username","password"})
 public class ApiController {
-    @GetMapping("/query/byzipcode")
+    @GetMapping("/api/query/byzipcode")
     public String queryByZipCode(HttpServletRequest request, Model model, @RequestParam String country, @RequestParam String zipCode){
 
         ZipCodeQuery zipCodeQuery = new ZipCodeQuery(country, zipCode);
@@ -128,7 +128,7 @@ public class ApiController {
     }
 
 
-    @PostMapping("/api/query/bytaxcode")
+    @GetMapping("/api/query/bytaxcode")
     @ResponseBody
     public String queryByTaxCode(HttpServletRequest request, Model model, @RequestParam String taxcode, @RequestParam String description, @RequestParam String taxzipcode){
         String result = null;

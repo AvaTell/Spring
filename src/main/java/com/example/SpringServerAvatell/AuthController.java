@@ -21,6 +21,8 @@ public class AuthController {
         sesh.removeAttribute("password");
         sesh.removeAttribute("isLoggedIn");
         sesh.invalidate();
+        model.addAttribute("password",null);
+        model.addAttribute("username",null);
 
         return "redirect:/index";
     }
