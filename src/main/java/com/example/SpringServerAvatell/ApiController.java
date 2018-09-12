@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -130,7 +131,7 @@ public class ApiController {
 
     @GetMapping("/api/query/bytaxcode")
     @ResponseBody
-    public String queryByTaxCode(HttpServletRequest request, Model model, @RequestParam String taxcode, @RequestParam String description, @RequestParam String taxzipcode){
+    public String queryByTaxCode(HttpServletRequest request, Model model, @RequestParam BigDecimal amount, @RequestParam BigDecimal quantity, @RequestParam String taxcode, @RequestParam String description, @RequestParam String taxzipcode){
         String result = null;
 
         HttpSession sesh = request.getSession();
@@ -153,6 +154,8 @@ public class ApiController {
 
         line.setTaxCode(taxcode);
         line.setDescription(description);
+        line.setAmount(amount);
+        line.setQuantity(quantity);
 
         ArrayList<LineItemModel> lines = new ArrayList<>();
         lines.add(line);
