@@ -1,7 +1,7 @@
 <p>Retrieve the Tax Rate for a Specified Zip Code</p>
 <form action="/query/byzipcode" method="GET">
-    <label>Country</label></lable><input type="text" name="country">
-    <label>Zip Code</label><input type="number" name="zipCode">
+    <label>Country</label></lable><input type="text" name="country"required>
+    <label>Zip Code</label><input type="number" name="zipCode"required>
     <input type="submit">
 </form>
 
@@ -9,13 +9,17 @@
     <p>Retrieve the Tax Rate for a Product Code</p>
     <form action="/query/bytaxcode" method="POST">
         <div>
-            <label>Tax Code</label></lable><input type="text" name="taxcode">
-            <label>Description</label><input type="text" name="description">
-            <label>Zip Code</label><input type="number" name="taxzipcode">
+            <label>Company Code</label></lable><input type="text" name="companyCode" required>
+            <label>Customer Code</label></lable><input type="text" name="customerCode"required>
+            <label>Zip Code</label><input type="number" name="taxzipcode"required>
         </div>
         <div>
-            <label>Total Amount of Sale Per Item</label></lable><input type="number" name="amount">
-            <label>Total Quantity of Items</label><input type="number" name="quantity">
+            <label>Tax Code</label></lable><input type="text" name="taxcode"required>
+            <label>Description</label><input type="text" name="description"required>
+        </div>
+        <div>
+            <label>Total Amount of Sale Per Item</label></lable><input type="number" step=0.01 name="amount" required>
+            <label>Total Quantity of Items</label><input type="number"  name="quantity" required>
         </div>
         <input type="submit">
     </form><br><br>

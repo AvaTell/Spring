@@ -8,7 +8,7 @@
 </head>
 <body>
     <div>
-        <p>Result for transaction with <span th:text="${mainObject.customerCode}"></span></p>
+        <p>Result for transaction with customer: <span th:text="${mainObject.customerCode}"></span></p>
         <ul>
             <li><span>Currency: </span><span th:text="${mainObject.currencyCode}"></span></li>
             <li><span>Total Amount: $</span><span th:text="${mainObject.totalAmount}"></span></li>
@@ -20,21 +20,20 @@
     </div>
     <div>
         <b><p>Your COMBINED tax rate is <span th:text="${totalTax}"></span></p></b>
-        <!--<b><p>Your COMBINED taxable amount is <span th:text="${taxableAmt}"></span></p></b>-->
-
+        <hr />
     </div>
 
     <div>
         <ul th:each="index : ${summaries}">
-            <b><i><p th:text="${index.taxName} + ' ' + ${index.rate}"></p></i></b>
-            <i><p th:text="${index.jurisName}"></p></i>
+            <b><i><li th:text="${index.taxName} + ' ' + ${index.rate}"></li></i></b>
+            <i><li th:text="'Jurisdiction: ' + ${index.jurisName}"></li></i>
 
-            <p>Tax Type: <span th:text="${index.taxType}"></span></p>
-            <p>Rate Type: <span th:text="${index.rateType}"></span></p>
-            <p>Taxable Amt: $<span th:text="${index.taxable}"></span></p>
-            <p>Tax Calculated: $<span th:text="${index.taxCalculated}"></span></p>
-            <p>Non-Taxable: $<span th:text="${index.nonTaxable}"></span></p>
-            <p>Exemption: $<span th:text="${index.exemption}"></span></p>
+            <li><span>Tax Type: </span><span th:text="${index.taxType}"></span></li>
+            <li><span>Rate Type: </span><span th:text="${index.rateType}"></span></li>
+            <li><span>Taxable Amt: $</span><span th:text="${index.taxable}"></span></li>
+            <li><span>Tax Calculated: $</span><span th:text="${index.taxCalculated}"></span></li>
+            <li><span>Non-Taxable: $</span><span th:text="${index.nonTaxable}"></span></li>
+            <li><span>Exemption: $</span><span th:text="${index.exemption}"></span></li>
         </ul>
     </div>
 </body>
