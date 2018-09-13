@@ -131,8 +131,16 @@ public class ApiController {
 
     @GetMapping("/api/query/bytaxcode")
     @ResponseBody
-    public String queryByTaxCode(HttpServletRequest request, Model model, @RequestParam BigDecimal amount, @RequestParam BigDecimal quantity, @RequestParam String taxcode, @RequestParam String description, @RequestParam String taxzipcode){
-        String result = null;
+    public String queryByTaxCode(HttpServletRequest request,
+                                 Model model,
+                                 @RequestParam String companyCode,
+                                 @RequestParam String customerCode,
+                                 @RequestParam BigDecimal amount,
+                                 @RequestParam BigDecimal quantity,
+                                 @RequestParam String taxcode,
+                                 @RequestParam String description,
+                                 @RequestParam String taxzipcode)
+    {        String result = null;
 
         HttpSession sesh = request.getSession();
 
@@ -167,8 +175,8 @@ public class ApiController {
         adModel.setSingleLocation(adInfo);
 
         ctm.setDate(date);
-        ctm.setCompanyCode("DEFAULT");
-        ctm.setCustomerCode("ABC");
+        ctm.setCompanyCode(companyCode);
+        ctm.setCustomerCode(customerCode);
         ctm.setType(DocumentType.SalesOrder);
         ctm.setCurrencyCode("USD");
         ctm.setCommit(false);
