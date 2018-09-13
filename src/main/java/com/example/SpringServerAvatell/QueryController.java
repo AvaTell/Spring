@@ -47,13 +47,12 @@ public class QueryController {
         HttpSession sesh = request.getSession();
 
         if(sesh.getAttribute("username")==null||sesh.getAttribute("password")==null){
-
             return"redirect:/index";
         }
+
+
         String user=model.asMap().get("username").toString();
         String pass=model.asMap().get("password").toString();
-
-//        RestTemplate rTemp = new RestTemplate();
 
         try {
 
@@ -77,72 +76,46 @@ public class QueryController {
                         + response.getStatusLine().getStatusCode());
             }
 
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader((response.getEntity().getContent())));
+            BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
 
             String output = null;
-            System.out.println("Output from Server .... \n");
-
-            /*
-            Example Data Coming Back:
-            {
-            "totalRate":0.100000,"rates":
-            [{
-            "rate":0.065000,
-            "name":"WA STATE TAX",
-            "type":"State"
-            },
-            {
-            "rate":0.000000,
-            "name":"WA COUNTY TAX",
-            "type":"County"
-            },
-            {
-            "rate":0.035000,
-            "name":"WA CITY TAX",
-            "type":"City"
-            }]}
-             */
-
-
             while ((output = br.readLine()) != null) {
-//                String[] outputArray = output.split("[^a-zA-Z0-9.\\s]");
-//                System.out.println("Output Array = " + Arrays.deepToString(outputArray));
-
-
-
-                if (output.contains(zipCodeQuery.zipCode))
+                if (output.contains(zipCodeQuery.zipCode)) {
                     System.out.println("Output only = " + output);
                     result = output;
+                }
             }
-            Gson gson = new Gson();
 
+            Gson gson = new Gson();
             TaxRateByPostalCode rate = gson.fromJson(result, TaxRateByPostalCode.class);
 
-            System.out.println(rate);
-
             model.addAttribute("rateInfo",rate);
-
             model.addAttribute("totalTax",rate.totalRate);
 
             return "result-from-zipcode";
+
         } catch (ClientProtocolException e) {
 
             e.printStackTrace();
-
         } catch (IOException e) {
-
             e.printStackTrace();
         }
-
 
         return "result-from-zipcode";
     }
 
 
     @PostMapping("/query/bytaxcode")
-//    @ResponseBody
-    public String queryByTaxCode(HttpServletRequest request, Model model, @RequestParam String companyCode, @RequestParam String customerCode, @RequestParam BigDecimal amount, @RequestParam BigDecimal quantity, @RequestParam String taxcode, @RequestParam String description, @RequestParam String taxzipcode){
+    public String queryByTaxCode(HttpServletRequest request,
+                                Model model,
+                                 @RequestParam String companyCode,
+                                 @RequestParam String customerCode,
+                                 @RequestParam BigDecimal amount,
+                                 @RequestParam BigDecimal quantity,
+                                 @RequestParam String taxcode,
+                                 @RequestParam String description,
+                                 @RequestParam String taxzipcode)
+                                {
         String result = null;
 
         HttpSession sesh = request.getSession();
@@ -150,19 +123,17 @@ public class QueryController {
         if(sesh.getAttribute("username")==null||sesh.getAttribute("password")==null){
             return"redirect:/index";
         }
+
+
         String user=model.asMap().get("username").toString();
         String pass=model.asMap().get("password").toString();
 
         RestTemplate rTemp = new RestTemplate();
-
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-
         CreateTransactionModel ctm = new CreateTransactionModel();
-
         Date date = new Date();
 
         LineItemModel line = new LineItemModel();
-
         line.setTaxCode(taxcode);
         line.setDescription(description);
         line.setAmount(amount);
@@ -193,23 +164,19 @@ public class QueryController {
             String authorized = Base64.getEncoder().encodeToString((user+":"+pass).getBytes());
             String requestURL = "https://rest.avatax.com/api/v2/transactions/create";
 
-/*
-RESOURCES FOR HTTPPOST: https://hc.apache.org/httpcomponents-client-ga/quickstart.html
-
-RESOURCES FOR STRING ENTITY: https://stackoverflow.com/questions/12059278/how-to-post-json-request-using-apache-httpclient
- */
+            /*
+            RESOURCES FOR HTTPPOST: https://hc.apache.org/httpcomponents-client-ga/quickstart.html
+            RESOURCES FOR STRING ENTITY: https://stackoverflow.com/questions/12059278/how-to-post-json-request-using-apache-httpclient
+             */
 
             StringEntity requestEntity = new StringEntity(
                     gson.toJson(ctm),
                     ContentType.APPLICATION_JSON);
 
             CloseableHttpClient httpclient = HttpClients.createDefault();
-//            HttpGet getRequest = new HttpGet(
-//                    "https://rest.avatax.com/api/v2/taxratesbyzipcode/download/2018-09-10");
             HttpPost postRequest = new HttpPost(requestURL);
             postRequest.addHeader("accept", "application/json");
             postRequest.addHeader("authorization", "Basic " + authorized);
-//            postRequest.addHeader("-d ", gson.toJson(ctm));
             postRequest.setEntity(requestEntity);
 
             HttpResponse response = httpclient.execute(postRequest);
@@ -219,37 +186,26 @@ RESOURCES FOR STRING ENTITY: https://stackoverflow.com/questions/12059278/how-to
                         + response.getStatusLine().getStatusCode());
             }
 
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader((response.getEntity().getContent())));
+            BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
 
-//            CreateTransactionModel model3 = new CreateTransactionModel();
-
-            String output;
-            System.out.println("Output from Server .... \n");
-            while ((output = br.readLine()) != null) {
-//                if (output.contains(taxzipcode))
-                    System.out.println(output);
+            try {
+                String output = br.readLine();
                 result = output;
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
-            Gson gson1 = new Gson();
 
+            Gson gson1 = new Gson();
             TaxRateByTaxCode summaries = gson1.fromJson(result, TaxRateByTaxCode.class);
 
-            System.out.println(summaries);
+            Double totalTax = 0.0;
+            for (TaxCodeSummary rate : summaries.summary) {
+                totalTax +=rate.rate;
+            }
 
             model.addAttribute("mainObject", summaries);
             model.addAttribute("summaries",summaries.summary);
-
-            Double totalTax = 0.0;
-//            Double taxableAmt = 0.0;
-
-            for (TaxCodeSummary rate : summaries.summary) {
-                totalTax +=rate.rate;
-//                taxableAmt += rate.taxable;
-            }
-
             model.addAttribute("totalTax", totalTax);
-//            model.addAttribute("taxableAmt", taxableAmt);
 
             return "result-from-taxcode";
 
@@ -260,8 +216,6 @@ RESOURCES FOR STRING ENTITY: https://stackoverflow.com/questions/12059278/how-to
             e.printStackTrace();
         }
 
-
         return "result-from-taxcode";
-//        return result;
     }
 }

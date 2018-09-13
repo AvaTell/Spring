@@ -9,8 +9,8 @@
     <p>Retrieve the Tax Rate for a Product Code</p>
     <form action="/query/bytaxcode" method="POST">
         <div>
-            <label>Company Code</label></lable><input type="text" name="taxcode" required>
-            <label>Customer Code</label></lable><input type="text" name="taxcode"required>
+            <label>Company Code</label></lable><input type="text" name="companyCode" required>
+            <label>Customer Code</label></lable><input type="text" name="customerCode"required>
             <label>Zip Code</label><input type="number" name="taxzipcode"required>
         </div>
         <div>
@@ -18,8 +18,8 @@
             <label>Description</label><input type="text" name="description"required>
         </div>
         <div>
-            <label>Total Amount of Sale Per Item</label></lable><input type="number" name="amount"required>
-            <label>Total Quantity of Items</label><input type="number" name="quantity"required>
+            <label>Total Amount of Sale Per Item</label></lable><input type="number" step=0.01 name="amount" required>
+            <label>Total Quantity of Items</label><input type="number"  name="quantity" required>
         </div>
         <input type="submit">
     </form><br><br>
