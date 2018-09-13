@@ -136,8 +136,10 @@ public class ApiController {
         HttpSession sesh = request.getSession();
 
         if(sesh.getAttribute("username")==null||sesh.getAttribute("password")==null){
-            return"redirect:/index";
+            return"{\"ERROR\": \"Invalid auth. Not logged in.\"}";
         }
+
+
         String user=model.asMap().get("username").toString();
         String pass=model.asMap().get("password").toString();
 
