@@ -42,6 +42,7 @@ Thanks to our instructor, Steve Geluso and our great Teaching Assistants, Molly 
 - Apache HTTPClient info found [here](https://hc.apache.org/httpcomponents-client-ga/quickstart.html)
 - Apache HTTPPost info found [here](https://hc.apache.org/httpcomponents-client-ga/quickstart.html)
 - Code Example for how to add a JSON object to a HTTPRequest Body found [here](https://stackoverflow.com/questions/12059278/how-to-post-json-request-using-apache-httpclient)
+- Code Example for how to make an ImageView clickable and go to a URL for [her](https://stackoverflow.com/questions/38979258/how-to-add-url-link-to-imagebutton-in-android)
 
 
 ## Content
