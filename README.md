@@ -46,7 +46,7 @@ Thanks to our instructor, Steve Geluso and our great Teaching Assistants, Molly 
 
 
 ## Content
-All content, as of August 10, 2018 is currently under Public Domain and not copywritten. This may change in the future.
+All content, as of September 14, 2018 is currently under Public Domain and not copywritten. This may change in the future.
 
 ## License
 This project is licensed under the MIT License. Please see the [LICENSE](LICENSE) for more details.
